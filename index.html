@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+
+<style>
+body{
+    background: linear-gradient(135deg,#ff758c,#ff7eb3);
+    transition: background 1s ease;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Arial, sans-serif;
+    color:white;
+    text-align:center;
+    overflow:hidden;
+    flex-direction:column;
+}
+
+/* Background after YES */
+body.show-photo{
+    background:
+        linear-gradient(135deg, rgba(255,117,140,0.5), rgba(255,126,179,0.5)),
+        url("us.jpeg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+.box{
+    background: rgba(255,255,255,0.15);
+    padding:40px;
+    border-radius:20px;
+    backdrop-filter: blur(10px);
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+button{
+    padding:12px 25px;
+    font-size:18px;
+    border:none;
+    border-radius:30px;
+    margin:10px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+#yes{ background:#ff2e63; color:white; }
+#no{ background:#444; color:white; }
+
+#msg{
+    margin-top:15px;
+    font-size:18px;
+    opacity:0;
+    transition:0.4s;
+}
+
+#topMessage{
+    position:fixed;
+    top:40px;
+    font-size:34px;
+    font-weight:bold;
+    opacity:0;
+    transition:0.5s;
+}
+
+/* ✨ Sparkles */
+.sparkle{
+    position:fixed;
+    top:-10px;
+    font-size:18px;
+    animation: fall linear forwards;
+    text-shadow:0 0 8px rgba(255,255,255,0.9);
+}
+
+@keyframes fall{
+    to{
+        transform: translateY(110vh);
+        opacity:0;
+    }
+}
+
+/* 💌 Typing message */
+#typingMessage{
+    position:fixed;
+    bottom:70px;
+    font-size:26px;
+    font-weight:500;
+    width:80%;
+    max-width:700px;
+    opacity:0;
+}
+</style>
+</head>
+
+<body>
+
+<div id="topMessage">YAY ❤️ Hipahi hai na!!! 😌</div>
+
+<div class="box">
+    <h1>Will you be my Valentine? 💘</h1>
+    <button id="yes" onclick="yes()">Yes 💖</button>
+    <button id="no" onclick="noClick()">No 😢</button>
+    <div id="msg"></div>
+</div>
+
+<div id="typingMessage"></div>
+
+<audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=romantic-piano-ambient-110624.mp3"></audio>
+
+<script>
+let yesSize = 18;
+let noSize = 18;
+let noCount = 0;
+
+function noClick(){
+    noCount++;
+
+    yesSize += 8;
+    const yesBtn = document.getElementById("yes");
+    yesBtn.style.fontSize = yesSize + "px";
+    yesBtn.style.padding = (yesSize/1.2) + "px " + (yesSize*1.8) + "px";
+
+    noSize -= 3;
+    const noBtn = document.getElementById("no");
+
+    if(noSize > 5){
+        noBtn.style.fontSize = noSize + "px";
+        noBtn.style.padding = (noSize/1.2) + "px " + (noSize*1.8) + "px";
+    }
+
+    if(noCount >= 7){
+        noBtn.style.display = "none";
+        const msg = document.getElementById("msg");
+        msg.innerHTML = "Looks like destiny chose YES for you ❤️";
+        msg.style.opacity = "1";
+    }
+}
+
+/* ✨ Sparkles */
+function createSparkle(){
+    const sparkle = document.createElement("div");
+    sparkle.classList.add("sparkle");
+
+    const symbols = ["✨","⭐","💫","🌟"];
+    sparkle.innerHTML = symbols[Math.floor(Math.random()*symbols.length)];
+
+    sparkle.style.left = Math.random()*100 + "vw";
+    sparkle.style.animationDuration = (Math.random()*2+3)+"s";
+
+    document.body.appendChild(sparkle);
+    setTimeout(()=>sparkle.remove(),5000);
+}
+
+function sparkleRain(){
+    for(let i=0;i<45;i++){
+        setTimeout(createSparkle,i*110);
+    }
+}
+
+/* 💌 Typing effect */
+function typeMessage(text, speed=50){
+    const el = document.getElementById("typingMessage");
+    el.style.opacity="1";
+    el.innerHTML="";
+    let i=0;
+    function type(){
+        if(i<text.length){
+            el.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type,speed);
+        }
+    }
+    type();
+}
+
+function yes(){
+    document.getElementById("music").play();
+    document.getElementById("topMessage").style.opacity="1";
+
+    // show photo first
+    document.body.classList.add("show-photo");
+
+    // sparkles after photo
+    setTimeout(sparkleRain,900);
+
+    // typing message after sparkles start
+    setTimeout(()=>{
+        typeMessage("You make my world brighter every single day 💖");
+    },1800);
+}
+</script>
+
+</body>
+</html>
